@@ -1,4 +1,4 @@
-Dependencies:
+Dependencies:\
 gcc/g++ (https://gcc.gnu.org/)\
 cmake (https://github.com/Kitware/CMake)\
 feh (https://github.com/derf/feh)

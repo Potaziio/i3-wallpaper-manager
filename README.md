@@ -1,6 +1,6 @@
 Dependencies:\
-gcc/g++ (https://gcc.gnu.org/)\
-cmake (https://github.com/Kitware/CMake)\
+gcc/g++ (https://gcc.gnu.org/) \
+cmake (https://github.com/Kitware/CMake) \
 feh (https://github.com/derf/feh)
 
 Steps to install:\

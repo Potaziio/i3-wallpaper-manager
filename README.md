@@ -3,6 +3,9 @@ gcc/g++ (https://gcc.gnu.org/) \
 cmake (https://github.com/Kitware/CMake) \
 feh (https://github.com/derf/feh)
 
+if using sway:\
+swaybg (https://github.com/swaywm/swaybg) \
+
 Steps to install:\
 chmod +x install\
 ./install

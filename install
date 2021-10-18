@@ -6,6 +6,8 @@ cd build/ && cmake . && make
 
 cd ..
 
+echo 
+
 echo Do you want to add the script to /usr/local/bin/?? [y/n]
 
 read CHOICE

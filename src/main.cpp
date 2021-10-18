@@ -7,9 +7,19 @@
 
 namespace fs = std::filesystem;
 
-bool CheckPackages()
+bool CheckFeh()
 {
     return access("/usr/bin/feh", X_OK) == 0;
+}
+
+bool CheckCmake()
+{
+    return access("usr/bin/cmake", X_OK) == 0;
+}
+
+bool CheckGcc()
+{
+    return access("usr/bin/gcc", X_OK) == 0;
 }
 
 std::string OpenConfigFile()
@@ -80,13 +90,27 @@ void GetWallpapers(std::string wallpaper_path)
 
 int main(int argc, char *argv[])
 {
-    if (CheckPackages())
+    if (CheckFeh() && CheckCmake() && CheckGcc())
         GetWallpapers(OpenConfigFile());
     else
     {
-        std::cout << "ERROR: feh is not installed!!" << std::endl;
-        std::cout << "feh's github repo: https://github.com/derf/feh" << std::endl;
-        std::cout << "feh's AUR Repo: https://aur.archlinux.org/packages/feh-git" << std::endl;
+        if (!CheckFeh())
+        {
+            std::cout << "ERROR: feh is not installed!!" << std::endl;
+            std::cout << "feh's github repo: https://github.com/derf/feh" << std::endl;
+        }
+
+        if (!CheckCmake())
+        {
+            std::cout << "ERROR: CMake is not installed!!" << std::endl;
+            std::cout << "Please install CMake" << std::endl;
+        }
+
+        if (!CheckGcc())
+        {
+            std::cout << "ERROR: GCC is not installed!!" << std::endl;
+            std::cout << "Please install GCC" << std::endl;
+        }
     }
 
     return 0;

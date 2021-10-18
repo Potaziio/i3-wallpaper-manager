@@ -77,7 +77,7 @@ void GetWallpapers(std::string wallpaper_path)
 
     int wallpaper_pick;
     
-    printf(">> ");
+    std::cout << ">> ";
 
     std::cin >> wallpaper_pick;
 

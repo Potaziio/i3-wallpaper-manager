@@ -147,11 +147,6 @@ int main(int argc, char *argv[])
             std::cout << "Please install GCC" << std::endl;
         }
     }
-    else if (!CheckSwaybg())
-    {
-         std::cout << "ERROR: Swaybg is not installed!!" << std::endl;
-         std::cout << "Please install Swaybg" << std::endl;
-    }
 
     return 0;
 }

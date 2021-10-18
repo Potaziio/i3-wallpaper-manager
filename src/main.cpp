@@ -12,6 +12,11 @@ bool CheckFeh()
     return access("/usr/bin/feh", X_OK) == 0;
 }
 
+bool CheckSwaybg()
+{
+    return access("/usr/bin/swaybg", X_OK) == 0;
+}
+
 bool CheckCmake()
 {
     return access("/usr/bin/cmake", X_OK) == 0;
@@ -79,7 +84,18 @@ void GetWallpapers(std::string wallpaper_path)
     if (wallpaper_pick > 0 && wallpaper_pick <= wallpapers.size())
     {
         std::cout << "Setting wallpaper to: " << wallpapers[wallpaper_pick - 1] << std::endl;
-        std::string wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+        std::string wallpaper_command;        
+
+        if (CheckSwaybg())
+        {
+            wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1] += (std::string)" -m fill";
+
+        }
+        else
+        {
+            wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+        }
+
         system(wallpaper_command.c_str());
     }
     else 
@@ -90,7 +106,27 @@ void GetWallpapers(std::string wallpaper_path)
 
 int main(int argc, char *argv[])
 {
-    if (CheckFeh() && CheckCmake() && CheckGcc())
+    if (CheckSwaybg())
+    {
+        if (CheckCmake() && CheckGcc())
+            GetWallpapers(OpenConfigFile());
+        else
+        {
+            if (!CheckCmake())
+            {
+                std::cout << "ERROR: CMake is not installed!!" << std::endl;
+                std::cout << "Please install CMake" << std::endl;
+            }
+
+            if (!CheckGcc())
+            {
+                std::cout << "ERROR: GCC is not installed!!" << std::endl;
+                std::cout << "Please install GCC" << std::endl;
+            }
+        }
+    }
+
+    else if (CheckFeh() && CheckCmake() && CheckGcc())
         GetWallpapers(OpenConfigFile());
     else
     {

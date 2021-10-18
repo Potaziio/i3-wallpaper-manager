@@ -122,10 +122,9 @@ int main(int argc, char *argv[])
             {
                 std::cout << "ERROR: GCC is not installed!!" << std::endl;
                 std::cout << "Please install GCC" << std::endl;
-            }
+            }                    
         }
     }
-
     else if (CheckFeh() && CheckCmake() && CheckGcc())
         GetWallpapers(OpenConfigFile());
     else
@@ -147,6 +146,12 @@ int main(int argc, char *argv[])
             std::cout << "ERROR: GCC is not installed!!" << std::endl;
             std::cout << "Please install GCC" << std::endl;
         }
+    }
+    
+    if (!CheckSwaybg())
+    {
+         std::cout << "ERROR: Swaybg is not installed!!" << std::endl;
+         std::cout << "Please install Swaybg" << std::endl;
     }
 
     return 0;

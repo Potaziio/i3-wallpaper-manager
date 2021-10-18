@@ -3,6 +3,6 @@ cmake
 make
 feh
 
-Steps to install:
-chmod +x install
+Steps to install:\
+chmod +x install\
 ./install

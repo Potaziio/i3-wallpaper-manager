@@ -82,8 +82,6 @@ void GetWallpapers(std::string wallpaper_path, bool random)
     
     int wallpaper_pick;
     
-    std::cout << ">> ";
-
     if (!random)
     {
         int wallpaper_pick;

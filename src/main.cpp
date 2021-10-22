@@ -80,6 +80,12 @@ void GetWallpapers(std::string wallpaper_path, bool random)
         filecount++;
     }
 
+<<<<<<< HEAD
+=======
+    int wallpaper_pick;
+    
+    std::cout << ">> ";
+>>>>>>> 938c5faccf5d24e015e6364684359539a63b3378
 
     if (!random)
     {

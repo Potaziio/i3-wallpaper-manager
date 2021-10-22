@@ -60,7 +60,7 @@ std::string OpenConfigFile()
     return filepath;
 }
 
-void GetWallpapers(std::string wallpaper_path)
+void GetWallpapers(std::string wallpaper_path, bool random)
 {
     std::vector<std::string> wallpapers;
 
@@ -69,38 +69,63 @@ void GetWallpapers(std::string wallpaper_path)
     for (const auto& file: fs::directory_iterator(wallpaper_path))
     { 
         std::string wallpaper_name = file.path().filename();
-        std::cout << "[" << filecount << "] " << wallpaper_name << std::endl;
+
+        if (!random)
+        {
+            std::cout << "[" << filecount << "] " << wallpaper_name << std::endl;
+        }
+
         wallpapers.push_back(wallpaper_name);
 
         filecount++;
     }
 
-    int wallpaper_pick;
-    
-    printf(">> ");
 
-    std::cin >> wallpaper_pick;
-
-    if (wallpaper_pick > 0 && wallpaper_pick <= wallpapers.size())
+    if (!random)
     {
-        std::cout << "Setting wallpaper to: " << wallpapers[wallpaper_pick - 1] << std::endl;
-        std::string wallpaper_command;        
+        int wallpaper_pick;
+        printf(">> ");
+        std::cin >> wallpaper_pick;
+
+        if (wallpaper_pick > 0 && wallpaper_pick <= wallpapers.size())
+        {
+            std::cout << "Setting wallpaper to: " << wallpapers[wallpaper_pick - 1] << std::endl;
+            std::string wallpaper_command;        
+
+            if (CheckSwaybg())
+            {
+                wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1] += (std::string)" -m fill";
+            }
+            else
+            {
+                wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+            }
+            system(wallpaper_command.c_str());
+        }
+        else 
+        {
+            std::cout << "ERROR: This number is not valid" << std::endl;
+        }
+    }
+    else
+    {
+        srand(time(NULL));
+
+        std::string wallpaper_command;
+
+        int randomWallpaper = (rand() % wallpapers.size());
 
         if (CheckSwaybg())
         {
-            wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1] += (std::string)" -m fill";
-
+            wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper] += (std::string)" -m fill";
+            std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
         }
         else
         {
-            wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+            wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper];
+            std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
         }
-
         system(wallpaper_command.c_str());
-    }
-    else 
-    {
-        std::cout << "ERROR: This number is not valid" << std::endl;
     }
 }
 
@@ -109,7 +134,9 @@ int main(int argc, char *argv[])
     if (CheckSwaybg())
     {
         if (CheckCmake() && CheckGcc())
-            GetWallpapers(OpenConfigFile());
+            GetWallpapers(OpenConfigFile(), (std::string)argv[1] == "-r");
+        else if (CheckCmake() && CheckGcc() && argv[1] == NULL)
+            GetWallpapers(OpenConfigFile(), false);
         else
         {
             if (!CheckCmake())
@@ -126,7 +153,12 @@ int main(int argc, char *argv[])
         }
     }
     else if (CheckFeh() && CheckCmake() && CheckGcc())
-        GetWallpapers(OpenConfigFile());
+    {
+        if (argv[1] != NULL)
+            GetWallpapers(OpenConfigFile(), (std::string)argv[1] == "-r");
+        else
+            GetWallpapers(OpenConfigFile(), false);
+    }
     else
     {
         if (!CheckFeh())
@@ -146,12 +178,6 @@ int main(int argc, char *argv[])
             std::cout << "ERROR: GCC is not installed!!" << std::endl;
             std::cout << "Please install GCC" << std::endl;
         }
-    }
-    
-    if (!CheckSwaybg())
-    {
-         std::cout << "ERROR: Swaybg is not installed!!" << std::endl;
-         std::cout << "Please install Swaybg" << std::endl;
     }
 
     return 0;

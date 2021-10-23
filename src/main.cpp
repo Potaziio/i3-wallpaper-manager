@@ -54,10 +54,33 @@ std::string OpenConfigFile()
 
         std::ofstream ofs(configfile_path);
         ofs << filepath;
+
         ofs.close();
+        wallpaper_path.close();
     }
 
     return filepath;
+}
+
+void SaveLastChoice(std::string command)
+{
+    std::string line;
+    std::ifstream LastChoicePath;
+
+    std::string config_path = std::getenv("HOME");
+
+    config_path += "/.config/.wallchange/lastwallpaper.sh";
+
+    LastChoicePath.open(config_path);
+
+    fs::path configfile_path(config_path);
+
+    std::ofstream ofs(configfile_path);
+
+    ofs << command; 
+
+    ofs.close();
+    LastChoicePath.close();
 }
 
 void GetWallpapers(std::string wallpaper_path, bool random)
@@ -100,6 +123,7 @@ void GetWallpapers(std::string wallpaper_path, bool random)
             else
             {
                 wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+                SaveLastChoice(wallpaper_command);
             }
             system(wallpaper_command.c_str());
         }

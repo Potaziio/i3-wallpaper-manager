@@ -19,13 +19,26 @@ then
     if [ "$CHOICE" == "y" ]
     then
         sudo cp $SCRIPT_DIR/build/Wallpaper_Change /usr/local/bin
+        echo
         echo "Finished installation. To run type Wallpaper_Change in any terminal."
     elif [ "$CHOICE" == "n" ]
     then
+        echo
         echo "Finished installation. To run go to the /build/ directory and run the executable created."
     else
+        echo
         echo "Choice not valid, please use [y/n]"
     fi
 else 
     echo choice not valid, please use [y/n]
 fi
+
+echo
+echo To save last wallpaper used to i3 config:
+
+echo paste this line into i3/config
+echo exec_always sh ~/.config/.wallchange/lastwallpaper.sh
+
+echo 
+
+echo Keep in mind this will only work after you run the script for the first time and if your config path is the default.

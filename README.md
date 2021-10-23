@@ -15,4 +15,12 @@ When you run Wallpaper_Change for the first time, it's going to ask you for a di
 Ex: /home/$USER/Pictures/Wallpapers
 It will list all the wallpapers on that directory\
 Choose one of them\
-Done.
+Done. \
+
+If you want to save your last choice to i3wm config so that you don't have to run the wallpaper everytime you turn on the device just add this to your i3wm config.\
+
+exec_always sh ~/.config/.wallchange/lastwallpaper.sh \
+
+Notes: 
+
+This will only work after the first time you run the command \

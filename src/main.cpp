@@ -116,21 +116,27 @@ void GetWallpapers(std::string wallpaper_path, bool random)
             std::cout << "Setting wallpaper to: " << wallpapers[wallpaper_pick - 1] << std::endl;
             std::string wallpaper_command;        
 
-            if (CheckSwaybg())
+            if (!CheckSwaybg() || !CheckFeh())
             {
-                wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1] += (std::string)" -m fill";
+                if (CheckSwaybg())
+                {
+                    wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1] += (std::string)" -m fill";
+                }
+                else
+                {
+                    wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
+                    SaveLastChoice(wallpaper_command);
+                }
+
+                system(wallpaper_command.c_str());
             }
-            else
+            else 
             {
-                wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[wallpaper_pick - 1];
-                SaveLastChoice(wallpaper_command);
+                std::cout << "ERROR: swaybg and feh are both installed in your system." << std::endl;
             }
-            system(wallpaper_command.c_str());
         }
         else 
-        {
             std::cout << "ERROR: This number is not valid" << std::endl;
-        }
     }
     else
     {
@@ -140,17 +146,22 @@ void GetWallpapers(std::string wallpaper_path, bool random)
 
         int randomWallpaper = (rand() % wallpapers.size());
 
-        if (CheckSwaybg())
+        if (!CheckSwaybg() || !CheckFeh())
         {
-            wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper] += (std::string)" -m fill";
-            std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
+            if (CheckSwaybg())
+            {
+                wallpaper_command = (std::string)"swaybg -i " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper] += (std::string)" -m fill";
+                std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
+            }
+            else
+            {
+                wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper];
+                std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
+            }
+            system(wallpaper_command.c_str());
         }
         else
-        {
-            wallpaper_command = (std::string)"feh --bg-fill " += wallpaper_path += (std::string)"/" += wallpapers[randomWallpaper];
-            std::cout << "Setting wallpaper to: " << wallpapers[randomWallpaper] << std::endl;
-        }
-        system(wallpaper_command.c_str());
+            std::cout << "ERROR: swaybg and feh are both installed in your system." << std::endl;
     }
 }
 
@@ -159,9 +170,12 @@ int main(int argc, char *argv[])
     if (CheckSwaybg())
     {
         if (CheckCmake() && CheckGcc())
-            GetWallpapers(OpenConfigFile(), (std::string)argv[1] == "-r");
-        else if (CheckCmake() && CheckGcc() && argv[1] == NULL)
-            GetWallpapers(OpenConfigFile(), false);
+        {
+            if (argv[1] != NULL)
+                GetWallpapers(OpenConfigFile(), (std::string)argv[1] == "-r");
+            else 
+                GetWallpapers(OpenConfigFile(), false);
+        }
         else
         {
             if (!CheckCmake())
